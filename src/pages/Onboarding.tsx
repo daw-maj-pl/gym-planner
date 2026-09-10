@@ -6,6 +6,7 @@ import { Select } from '../components/ui/Select';
 import { Textarea } from '../components/ui/Textarea';
 import { Button } from '../components/ui/Button';
 import { ArrowRight } from 'lucide-react';
+import type { UserProfile } from '../types';
 
 const goalOptions = [
   { value: 'bulk', label: 'Build Muscle (Bulk)' },
@@ -50,7 +51,7 @@ const splitOptions = [
 ];
 
 export default function Onboarding() {
-  const { user } = useAuth();
+  const { user, saveProfile } = useAuth();
   const [formData, setFormData] = useState({
     goal: 'bulk',
     experience: 'intermediate',
@@ -63,6 +64,22 @@ export default function Onboarding() {
 
   function updateForm(field: string, value: string) {
     setFormData(prev => ({ ...prev, [field]: value }));
+  }
+
+  async function handleQuestionnaire(e: React.SubmitEvent) {
+    e.preventDefault();
+
+    const profile: Omit<UserProfile, 'userId' | 'updatedAt'> = {
+      goal: formData.goal as UserProfile['goal'],
+      experience: formData.experience as UserProfile['experience'],
+      daysPerWeek: parseInt(formData.daysPerWeek),
+      sessionLength: parseInt(formData.sessionLength),
+      equipment: formData.equipment as UserProfile['equipment'],
+      injuries: formData.injuries || undefined,
+      preferredSplit: formData.preferredSplit as UserProfile['preferredSplit']
+    };
+
+    await saveProfile(profile);
   }
 
   if (!user) {
@@ -78,7 +95,7 @@ export default function Onboarding() {
             <p className="text-[var(--color-muted)] mb-6">
               Help us create the perfect plan for you.
             </p>
-            <form className="space-y-5">
+            <form onSubmit={handleQuestionnaire} className="space-y-5">
               <Select
                 id="goal"
                 label="What's your primary goal?"
