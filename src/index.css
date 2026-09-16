@@ -14,6 +14,10 @@
 }
 
 @layer base {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
   html {
     font-family: var(--font-sans);
     background-color: var(--color-background);
@@ -25,5 +29,11 @@
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Override Better Auth skeleton colors */
+  [data-slot='skeleton'],
+  .animate-pulse {
+    background-color: var(--color-border) !important;
   }
 }
