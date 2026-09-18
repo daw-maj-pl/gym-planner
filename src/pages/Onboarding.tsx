@@ -63,7 +63,6 @@ export default function Onboarding() {
     preferredSplit: 'upper_lower'
   });
   const [isGenerating, setIsGenerating] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   function updateForm(field: string, value: string) {
@@ -88,7 +87,7 @@ export default function Onboarding() {
       await generatePlan();
       navigate('/profile');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save profile');
+      console.error(err instanceof Error ? err.message : 'Failed to save profile')
     } finally {
       setIsGenerating(false);
     }
